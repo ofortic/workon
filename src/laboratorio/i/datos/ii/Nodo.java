@@ -8,7 +8,7 @@ package laboratorio.i.datos.ii;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
- *
+ * @author cdcasalins
  * @author ofortich
  */
 public class Nodo extends DefaultMutableTreeNode {
@@ -19,13 +19,12 @@ public class Nodo extends DefaultMutableTreeNode {
     private String data;
     private Nodo rLink;
     private Nodo lLink;
+    Nodo dependencia;
 
     public String getNombre() {
         return nombre;
     }
 
-    
-    
     public Nodo getrLink() {
         return rLink;
     }
@@ -33,7 +32,6 @@ public class Nodo extends DefaultMutableTreeNode {
     public Nodo getlLink() {
         return lLink;
     }
-    
     
     public String getData() {
         return data;
@@ -45,28 +43,15 @@ public class Nodo extends DefaultMutableTreeNode {
         this.data=data;
     }
     
-    /*
-    void add(int i) {
-        Nodo temp=this,ant=null;
-        while(temp!=null){
-            if(temp.data==i)break;
-            else if(i>temp.data){
-                ant=temp;
-                temp=temp.Rlink;
-            }else{
-                ant=temp;
-                temp=temp.Llink;
-            }
-        }
-        if(temp==null){//no esta repetido
-            if(i>ant.data) ant.rLink= new Nodo(i);
-            else ant.Llink= new Nodo(i);
-        }
-    }
-    */
     String getNombre(Nodo nodo){
         return this.nombre;
     }
+    
+    /**
+     * Metodo agregar entregables y paquetes 
+     * @param nombre
+     * @param paquete 
+     */
     void add(String nombre, Boolean paquete){
         if (paquete) {
             this.ultPaquete().lLink=new Nodo(nombre, true);
@@ -75,14 +60,24 @@ public class Nodo extends DefaultMutableTreeNode {
         }
     }
     
-     Nodo ultPaquete(){
-        Nodo p=this;
-        while(p.lLink != null){
-            p=p.lLink;
+    /**
+     * Metodo para hayar el ultimo paquete del arbol
+     * @return 
+     */
+    Nodo ultPaquete() {
+        Nodo p = this;
+        while (p.lLink != null) {
+            p = p.lLink;
         }
         return p;
     }
-     
+
+    /**
+     * revisa si ya existe un nodo
+     * @param nombre
+     * @param p
+     * @return 
+     */
     boolean existe(String nombre, Nodo p){
         if (p==null) {
             return false;
@@ -94,6 +89,13 @@ public class Nodo extends DefaultMutableTreeNode {
             }
         }
     }
+    
+    /**
+     * busca un nodo
+     * @param nombre
+     * @param p
+     * @return 
+     */
     Nodo buscarPaquete(String nombre, Nodo p) {
         if (p != null) {
             if (p.nombre.equals(nombre)) {
@@ -105,22 +107,12 @@ public class Nodo extends DefaultMutableTreeNode {
             return p;
         }
     }
-    /*
-    String nodosTerminales(Nodo ptr, String nodos){
-        if (ptr!=null) {
-            nodosTerminales(ptr.lLink,nodos);
-            nodosTerminales(ptr.rLink,nodos);
-            if (ptr.lLink!=null&&ptr.rLink!=null) {
-                return ptr.nombre+", "+nodos;
-                
-            }else{
-                return ""+nodos;
-            }
-        }else{
-            return ""+nodos;
-        }
-    }
-*/
+    
+    /**
+     * Busca los nodos hoja
+     * @param ptr
+     * @return 
+     */
     String hojas(Nodo ptr){
         String nodos="";
         Nodo p=ptr.lLink;
@@ -133,6 +125,12 @@ public class Nodo extends DefaultMutableTreeNode {
         
         return nodos;
     }
+    
+    /**
+     * Nodos hoja
+     * @param p
+     * @return 
+     */
     String nodosHoja(Nodo p){
         if (p==null) {
             return "";
@@ -144,6 +142,12 @@ public class Nodo extends DefaultMutableTreeNode {
             }
         }
     }
+    
+    /**
+     * paquetes con un solo entregable
+     * @param ptr
+     * @return 
+     */
     String unSoloEntregable(Nodo ptr){
         String nodos="";
         Nodo p=ptr;
@@ -165,6 +169,13 @@ public class Nodo extends DefaultMutableTreeNode {
         }
         return nodos;
     }
+    
+    /**
+     * busca un entregable
+     * @param nombre
+     * @param p
+     * @return 
+     */
     Nodo buscarEntregable(String nombre, Nodo p){
         if (p != null) {
             if (p.nombre.equals(nombre)) {
@@ -177,6 +188,11 @@ public class Nodo extends DefaultMutableTreeNode {
         }
     }
     
+    /**
+     * saca la altura del arbol
+     * @param p
+     * @return 
+     */
     int altura(Nodo p){
         int a=0;
         Nodo h=null;
@@ -206,6 +222,11 @@ public class Nodo extends DefaultMutableTreeNode {
         return  a-1;   
         
     }
+    
+    /**
+     * haya el ultimo entregable de un paquete
+     * @return 
+     */
     public Nodo ultEntregable(){
         Nodo p=this;
         while(p.rLink != null){

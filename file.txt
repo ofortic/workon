@@ -1,19 +1,6 @@
-Software Design
-   Fecha
-   queue
-Software Testing
-   Fecha2
-   otro hijo
-Hardware components
-   Fecha3
-Buissness meeting
-   Fecha4
-   why
-Software management
-   Fecha5
-Storm ideas
-   Fecha6
-   rowcount
-New ideas
-   Fecha7
-   porque no nos dejan usar arraylist
+diseño
+   diseño1
+prueba
+   prueba1
+teoria
+   teoria1

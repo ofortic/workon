@@ -43,6 +43,4 @@ public class Usuario {
     public void setNick(String nick) {
         this.nick = nick;
     }
-    
-    
 }

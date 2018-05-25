@@ -23,6 +23,7 @@ import javax.swing.DefaultListModel;
 /**
  *
  * @author ofortich
+ * @author cdcasalins
  */
 public class GestorFrame extends javax.swing.JFrame {
     Nodo ptr = new Nodo("ptr",true);
@@ -43,25 +44,7 @@ public class GestorFrame extends javax.swing.JFrame {
      */
     public GestorFrame() throws IOException {
         initComponents();
-        leerArchivo(file,ptr,modelo,jTree);
-
-        // Construccion de los datos del arbol ejemplo
-        /*
-        DefaultMutableTreeNode padre = new DefaultMutableTreeNode("padre");
-        modelo.insertNodeInto(padre, ptr, 0);
-        
-        DefaultMutableTreeNode tio = new DefaultMutableTreeNode("tio");
-        
-        modelo.insertNodeInto(tio, ptr, 0);
-            
-        DefaultMutableTreeNode hijo = new DefaultMutableTreeNode("hijo");
-        DefaultMutableTreeNode hija = new DefaultMutableTreeNode("hija");
-        
-        modelo.insertNodeInto(hijo, tio, 0);
-        modelo.insertNodeInto(hija, padre, 0);
-        */
-        jTree.setModel(modelo);         
-       
+                 
     }
 
     /**
@@ -98,6 +81,12 @@ public class GestorFrame extends javax.swing.JFrame {
         modelo3 = new DefaultListModel();
         postList = new javax.swing.JList<>();
         jButton3 = new javax.swing.JButton();
+        depFrame = new javax.swing.JFrame();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        modeloDep = new DefaultListModel();
+        depList = new javax.swing.JList<>();
+        jLabel8 = new javax.swing.JLabel();
+        selectDepend = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         nombreAccounttxt = new javax.swing.JTextField();
@@ -222,7 +211,8 @@ public class GestorFrame extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        jFrame2.setMinimumSize(new java.awt.Dimension(400, 350));
+        jFrame2.setMinimumSize(new java.awt.Dimension(400, 400));
+        jFrame2.setPreferredSize(new java.awt.Dimension(400, 351));
 
         jLabel5.setText("Recorrido PreOrden");
 
@@ -284,6 +274,46 @@ public class GestorFrame extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 112, Short.MAX_VALUE)
                 .addComponent(jButton3)
                 .addGap(14, 14, 14))
+        );
+
+        depFrame.setMinimumSize(new java.awt.Dimension(288, 288));
+
+        depList.setModel(modeloDep);
+        jScrollPane5.setViewportView(depList);
+
+        jLabel8.setText("Seleccione la dependencia del entregable");
+
+        selectDepend.setText("Seleccionar");
+        selectDepend.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                selectDependActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout depFrameLayout = new javax.swing.GroupLayout(depFrame.getContentPane());
+        depFrame.getContentPane().setLayout(depFrameLayout);
+        depFrameLayout.setHorizontalGroup(
+            depFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(depFrameLayout.createSequentialGroup()
+                .addGap(30, 30, 30)
+                .addGroup(depFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel8)
+                    .addGroup(depFrameLayout.createSequentialGroup()
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(40, 40, 40)
+                        .addComponent(selectDepend)))
+                .addContainerGap(48, Short.MAX_VALUE))
+        );
+        depFrameLayout.setVerticalGroup(
+            depFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, depFrameLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 23, Short.MAX_VALUE)
+                .addGroup(depFrameLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(selectDepend, javax.swing.GroupLayout.Alignment.TRAILING))
+                .addGap(37, 37, 37))
         );
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -350,9 +380,13 @@ public class GestorFrame extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    
+    /**
+     * Subrutina encargada de verificar si el usuario y contraseña ingresado
+     * son los correctos, leyendolos del archivo cuenta
+     * @param evt 
+     */
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+        
         try{
             FileReader fr3 = new FileReader(cuenta);
             BufferedReader br3 = new BufferedReader(fr3);
@@ -367,27 +401,24 @@ public class GestorFrame extends javax.swing.JFrame {
             System.out.println(aux2);
             if (aux2.equals(comp)) {
                 jFrame1.setVisible(true);
+                leerArchivo(file,ptr,modelo,jTree);
+                jTree.setModel(modelo);
             } else {
                 JOptionPane.showMessageDialog(null, "Error, usuario invalido");
                 nombreAccounttxt.setText("");
                 contraseñaAccounttxt.setText("");
             }
         } catch(Exception s){
-            
-        }
-        /*
-        if(nombreAccounttxt.getText().equals(usuarioUnico.getName()) && contraseñaAccounttxt.getText().equals(usuarioUnico.getPassword())){
-            jFrame1.setVisible(true);
-        }else{
-            JOptionPane.showMessageDialog(null, "Error, usuario invalido");
-            nombreAccounttxt.setText("");
-            contraseñaAccounttxt.setText("");
-        }
-        */        
+            JOptionPane.showMessageDialog(null, "Ha ocurrido un error desconocido");
+        }        
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    /**
+     * Subrutina para agregar paquetes tanto al arbol como al modelo del jtree
+     * @param evt 
+     */
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+       
         Nodo p=ptr;
         if (!(ptr.existe(nombrePaquetetxt.getText(), p)) && !(nombrePaquetetxt.getText().equals(""))) {
             System.out.println("agrega "+nombrePaquetetxt.getText());
@@ -404,12 +435,14 @@ public class GestorFrame extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Ese paquete ya existe");
                 nombrePaquetetxt.setText("");
             }
-        }
-        
-        
-        
+        } 
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    
+    /**
+     * Subrutina encargada de crear un usuario, guardando su informacion en 
+     * el archivo cuenta
+     * @param evt 
+     */
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         try {
             FileReader fr2 = new FileReader(cuenta);
@@ -435,8 +468,6 @@ public class GestorFrame extends javax.swing.JFrame {
                         e.printStackTrace();
                     } finally {
                         try {
-                            // Nuevamente aprovechamos el finally para 
-                            // asegurarnos que se cierra el fichero.
                             if (null != cuenta) {
                                 System.out.println("gg");
                                 pw2.close();
@@ -454,7 +485,7 @@ public class GestorFrame extends javax.swing.JFrame {
                 contraseñaAccounttxt.setText("");
             }
         } catch(Exception a){
-            
+            JOptionPane.showMessageDialog(null, "Ha ocurrido un error desconocido");
         }
         
     }//GEN-LAST:event_jButton5ActionPerformed
@@ -476,12 +507,15 @@ public class GestorFrame extends javax.swing.JFrame {
         // TODO add your handling code here:
         añadir.setEnabled(false);
     }//GEN-LAST:event_jTreeTreeCollapsed
-
+/**
+ * Subrutina encargada de agregar entregables tanto al arbol como al modelo del
+ * jtree
+ * @param evt 
+ */
     private void añadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_añadirActionPerformed
-        // TODO add your handling code here:
+        Nodo q=ptr;
+        llenarLista(q);
         String nombreEntregable=txtEntregable.getText();
-        //String nombrePaquete=jTree.get;
-        //Nodo padre=ptr.buscarPaquete(nombrePaquete, ptr);
         Nodo p=ptr;
         if (!((ptr.existe(nombreEntregable, p)) || txtEntregable.getText().equals(""))&&(jTree.getLastSelectedPathComponent()!=null)) {
             System.out.println("agrega "+nombreEntregable);
@@ -507,12 +541,28 @@ public class GestorFrame extends javax.swing.JFrame {
             }
         }
         
+        depFrame.setVisible(true);
     }//GEN-LAST:event_añadirActionPerformed
 
+    public void llenarLista(Nodo p){
+        if(p == null){
+            return;
+        }    
+        if(p.paquete == false){
+            modeloDep.addElement(p.getNombre());
+        }
+        llenarLista(p.getlLink());
+        llenarLista(p.getrLink());
+        
+    }
+    
     private void txtEntregableActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEntregableActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtEntregableActionPerformed
-
+    /**
+     * Subrutina encargada de mostrar el reporte
+     * @param evt 
+     */
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         JOptionPane.showMessageDialog(null, "los nodos terminales son: "+ ptr.nodosHoja(ptr));
         if (ptr.unSoloEntregable(ptr).equals("")) {
@@ -524,16 +574,21 @@ public class GestorFrame extends javax.swing.JFrame {
        //frame para mostrar los recorridos
          jFrame2.setVisible(true); 
     }//GEN-LAST:event_jButton2ActionPerformed
-
+    /**
+     * Llamado a los recorridos
+     * @param evt 
+     */
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
         recorridoPreorden();
         recorridoInorden();
         recorridoPosorden();
     }//GEN-LAST:event_jButton3ActionPerformed
-
+    /**
+     * Subrutina encargada de guardar los elementos del arbol en el archivo file
+     * @param evt 
+     */
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        
         try
         {
             w = new FileWriter(file);
@@ -553,13 +608,10 @@ public class GestorFrame extends javax.swing.JFrame {
                         }                       
                     }
                 }
-                
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
            try {
-           // Nuevamente aprovechamos el finally para 
-           // asegurarnos que se cierra el fichero.
            if (null != file)
               pw.close();
               bw.close();
@@ -567,8 +619,17 @@ public class GestorFrame extends javax.swing.JFrame {
            } catch (Exception e2) {
               e2.printStackTrace();
            }
-        }        // TODO add your handling code here:
+        }        
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void selectDependActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selectDependActionPerformed
+        
+        int indice = depList.getSelectedIndex();
+        Object dep = modeloDep.getElementAt(indice);
+        dep.toString();
+        
+        
+    }//GEN-LAST:event_selectDependActionPerformed
 
     public void recorridoPreorden()
     {
@@ -580,7 +641,6 @@ public class GestorFrame extends javax.swing.JFrame {
         if (nodo == null) {
             return;
         }
-
         System.out.print(nodo.getNombre() + " ");
         modelo1.addElement(nodo.getNombre());
         ayudantePreorden(nodo.getlLink());   
@@ -591,6 +651,7 @@ public class GestorFrame extends javax.swing.JFrame {
     {
         ayudanteInorden(ptr);
     }
+    
      //recorrido inorden
     private void ayudanteInorden( Nodo nodo)
     {
@@ -619,6 +680,17 @@ public class GestorFrame extends javax.swing.JFrame {
         System.out.print(nodo.getNombre() + " ");
         modelo3.addElement(nodo.getNombre());
     }
+    
+    /**
+     * Subrutina ecargada de cargar los datos del archivo en el programa, los 
+     * carga tanto en el jtree como en el arbol
+     * @param archivo
+     * @param ptr
+     * @param modelo
+     * @param jTree
+     * @throws FileNotFoundException
+     * @throws IOException 
+     */
     void leerArchivo(File archivo, Nodo ptr, DefaultTreeModel modelo, javax.swing.JTree jTree) throws FileNotFoundException, IOException {
         String a;
         Nodo p=ptr;
@@ -669,9 +741,8 @@ public class GestorFrame extends javax.swing.JFrame {
             }
         }
     }
-    void leerEntregables(File archivo){
-        
-    }
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -715,6 +786,9 @@ public class GestorFrame extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton añadir;
     private javax.swing.JPasswordField contraseñaAccounttxt;
+    private javax.swing.JFrame depFrame;
+    private javax.swing.JList<String> depList;
+    public DefaultListModel modeloDep;
     private javax.swing.JList<String> inList;
     public DefaultListModel modelo2;
     private javax.swing.JButton jButton1;
@@ -732,10 +806,12 @@ public class GestorFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JTree jTree;
     private javax.swing.JTextField nombreAccounttxt;
     private javax.swing.JTextField nombrePaquetetxt;
@@ -743,6 +819,7 @@ public class GestorFrame extends javax.swing.JFrame {
     public DefaultListModel modelo3;
     private javax.swing.JList<String> preList;
     public DefaultListModel modelo1;
+    private javax.swing.JButton selectDepend;
     private javax.swing.JTextField txtEntregable;
     // End of variables declaration//GEN-END:variables
 }
