@@ -36,6 +36,7 @@ public class GestorFrame extends javax.swing.JFrame {
     FileWriter w;
     BufferedWriter bw;
     PrintWriter pw;
+    Nodo auxilio;
     
     Usuario usuarioUnico = new Usuario();
     DefaultTreeModel modelo = new DefaultTreeModel(ptr);
@@ -540,7 +541,7 @@ public class GestorFrame extends javax.swing.JFrame {
                 txtEntregable.setText("");
             }
         }
-        
+        auxilio=p;
         depFrame.setVisible(true);
     }//GEN-LAST:event_añadirActionPerformed
 
@@ -626,9 +627,11 @@ public class GestorFrame extends javax.swing.JFrame {
         
         int indice = depList.getSelectedIndex();
         Object dep = modeloDep.getElementAt(indice);
-        dep.toString();
-        
-        
+        String s = dep.toString();
+        Nodo auxi = ptr;
+        auxi.buscarEntregable(s, ptr);
+        auxilio.dependencia = auxi;
+        depFrame.setVisible(false);
     }//GEN-LAST:event_selectDependActionPerformed
 
     public void recorridoPreorden()
