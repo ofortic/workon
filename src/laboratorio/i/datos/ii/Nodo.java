@@ -5,6 +5,7 @@
  */
 package laboratorio.i.datos.ii;
 
+import java.util.Date;
 import javax.swing.tree.DefaultMutableTreeNode;
 
 /**
@@ -20,7 +21,9 @@ public class Nodo extends DefaultMutableTreeNode {
     private Nodo rLink;
     private Nodo lLink;
     Nodo dependencia;
-
+    Date fecha;
+    //dibujar
+    int x,y;
     public String getNombre() {
         return nombre;
     }
@@ -59,7 +62,23 @@ public class Nodo extends DefaultMutableTreeNode {
             this.ultEntregable().rLink=new Nodo(nombre, false);
         }
     }
-    
+    void add(Nodo nodo ){
+        if (nodo.paquete) {
+            this.ultPaquete().lLink=new Nodo(nodo.nombre, true);
+        }else{
+            this.ultEntregable().rLink=new Nodo(nodo.nombre, false, nodo.fecha);
+        }
+    }
+    //Nuevo constructor con fechas
+    public Nodo(String nombre, Boolean paquete, Date fecha) {
+        this.nombre = nombre;
+        this.paquete=paquete;
+        this.data=data;
+        this.fecha=fecha;
+        if (!paquete) {
+            //agregar archivo
+        }
+    }
     /**
      * Metodo para hayar el ultimo paquete del arbol
      * @return 
@@ -181,7 +200,7 @@ public class Nodo extends DefaultMutableTreeNode {
             if (p.nombre.equals(nombre)) {
                 return p;
             } else {
-                return buscarPaquete(nombre, p.rLink);
+                return buscarEntregable(nombre, p.rLink);
             }
         }else{
             return p;
